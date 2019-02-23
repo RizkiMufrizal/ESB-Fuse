@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:camel-cxf="http://camel.apache.org/schema/blueprint/cxf"
+           xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+		   http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
+
+    <camelContext xmlns="http://camel.apache.org/schema/blueprint">
+        <routeBuilder ref="globalPostRouteBuilder"/>
+        <routeBuilder ref="catalogGatewayRouteBuilder"/>
+    </camelContext>
+
+    <bean id="globalPostRouteBuilder" class="org.rizki.mufrizal.esb.fuse.route.GlobalRouteBuilder">
+        <property name="restEndpoint" value="cxfrs:bean:catalogGatewayServer?bindingStyle=SimpleConsumer"/>
+    </bean>
+
+    <!-- service route -->
+    <bean id="catalogGatewayRouteBuilder" class="org.rizki.mufrizal.esb.fuse.route.CatalogGatewayRouteBuilder"/>
+    <!-- service route -->
+
+    <!-- service ws -->
+    <bean id="catalogGatewayService" class="org.rizki.mufrizal.esb.fuse.service.CatalogGatewayService"/>
+    <!-- service ws -->
+
+    <!-- CXF servers -->
+    <camel-cxf:rsServer id="catalogGatewayServer" address="http://0.0.0.0:10002/v1" loggingFeatureEnabled="true">
+        <camel-cxf:serviceBeans>
+            <ref component-id="catalogGatewayService"/>
+        </camel-cxf:serviceBeans>
+        <camel-cxf:providers>
+            <ref component-id="jacksonJsonProvider"/>
+        </camel-cxf:providers>
+    </camel-cxf:rsServer>
+    <!-- CXF servers -->
+
+    <!-- provider -->
+    <bean id="jacksonJsonProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
+    <!-- provider -->
+
+</blueprint>
