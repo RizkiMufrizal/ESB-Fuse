@@ -20,5 +20,8 @@ public class CatalogGatewayRouteBuilder extends RouteBuilder {
                 .process(exchange -> {
                     exchange.getOut().setBody(Response.status(Response.Status.OK).entity("Hello World").build());
                 }).end();
+
+        from("direct:saveCatalog")
+                .to("direct-vm:catalog-repository-save-catalog");
     }
 }
