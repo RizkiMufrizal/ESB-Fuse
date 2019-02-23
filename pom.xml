@@ -11,10 +11,12 @@
     <version>0.0.1</version>
     <modules>
         <module>catalog-gateway</module>
+        <module>catalog-repository</module>
     </modules>
     <name>JBoss Fuse Service</name>
 
     <properties>
+        <postgresql.version>42.2.2</postgresql.version>
         <asm-all.version>5.2</asm-all.version>
         <org.osgi.service.http.version>1.2.1</org.osgi.service.http.version>
         <cxf-rt-transports-http-jetty.version>3.3.0</cxf-rt-transports-http-jetty.version>
