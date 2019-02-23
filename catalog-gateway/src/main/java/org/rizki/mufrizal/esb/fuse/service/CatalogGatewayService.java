@@ -1,9 +1,8 @@
 package org.rizki.mufrizal.esb.fuse.service;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import org.rizki.mufrizal.esb.fuse.helper.JsonObject;
+
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -24,6 +23,12 @@ public class CatalogGatewayService {
     @Path("/catalogs")
     @GET
     public Response getCatalogs() {
+        return null;
+    }
+
+    @Path("/catalogs")
+    @POST
+    public Response saveCatalog(JsonObject jsonObject) {
         return null;
     }
 
