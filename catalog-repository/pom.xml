@@ -26,6 +26,10 @@
             <version>${postgresql.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-jms</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
