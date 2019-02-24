@@ -25,4 +25,19 @@
         <property name="maxWaitMillis" value="5000"/>
     </bean>
 
+    <bean id="activeMQConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+        <property name="brokerURL" value="tcp://localhost:61616"/>
+        <property name="userName" value="admin"/>
+        <property name="password" value="admin"/>
+    </bean>
+
+    <bean id="jmsConfiguration" class="org.apache.camel.component.jms.JmsConfiguration">
+        <property name="connectionFactory" ref="activeMQConnectionFactory"/>
+        <property name="concurrentConsumers" value="10"/>
+    </bean>
+
+    <bean id="jms" class="org.apache.camel.component.jms.JmsComponent">
+        <property name="configuration" ref="jmsConfiguration"/>
+    </bean>
+
 </blueprint>
