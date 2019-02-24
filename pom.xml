@@ -12,6 +12,7 @@
     <modules>
         <module>catalog-gateway</module>
         <module>catalog-repository</module>
+        <module>logging-service</module>
     </modules>
     <name>JBoss Fuse Service</name>
 
