@@ -1,5 +1,6 @@
 package org.rizki.mufrizal.esb.fuse.route;
 
+import org.apache.camel.ExchangePattern;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
 import org.rizki.mufrizal.esb.fuse.helper.JsonObject;
@@ -22,6 +23,8 @@ public class CatalogRepositoryRouterBuilder extends RouteBuilder {
     public void configure() throws Exception {
         from("direct-vm:catalog-repository-save-catalog")
                 .log(LoggingLevel.INFO, "logging ${body}")
+                .process(exchange -> exchange.getIn().setHeader("headerStep", "catalog-repository-save-catalog"))
+                .to(ExchangePattern.InOnly, "jms:queue:jmsTransactionLogging")
                 .to("sql:INSERT INTO tb_catalog(catalog_id, catalog_name, catalog_price) VALUES (:#CatalogId, :#CatalogName, :#CatalogPrice)")
                 .process(exchange -> {
                     JsonObject jsonObject = exchange.getIn().getBody(JsonObject.class);
