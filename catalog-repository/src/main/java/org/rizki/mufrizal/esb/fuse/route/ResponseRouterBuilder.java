@@ -1,7 +1,5 @@
 package org.rizki.mufrizal.esb.fuse.route;
 
-import org.apache.camel.ExchangePattern;
-import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
 import org.rizki.mufrizal.esb.fuse.helper.JsonObject;
 
@@ -12,20 +10,20 @@ import java.util.Map;
 /**
  * @Author Rizki Mufrizal <mufrizalrizki@gmail.com>
  * @Web <https://RizkiMufrizal.github.io>
- * @Since 23 February 2019
- * @Time 19:10
+ * @Since 25 February 2019
+ * @Time 21:48
  * @Project esb-fuse-service
  * @Package org.rizki.mufrizal.esb.fuse.route
- * @File CatalogRepositoryRouterBuilder
+ * @File ResponseRouterBuilder
  */
-public class CatalogRepositoryRouterBuilder extends RouteBuilder {
+public class ResponseRouterBuilder extends RouteBuilder {
     @Override
     public void configure() throws Exception {
-        from("direct-vm:catalog-repository-save-catalog")
-                .log(LoggingLevel.INFO, "logging ${body}")
-                .process(exchange -> exchange.getIn().setHeader("headerStep", "catalog-repository-save-catalog"))
-                .to(ExchangePattern.InOnly, "jms:queue:jmsTransactionLogging")
-                .to("sql:INSERT INTO tb_catalog(catalog_id, catalog_name, catalog_price) VALUES (:#CatalogId, :#CatalogName, :#CatalogPrice)")
+        from("direct:response-catalog")
+                .process(exchange -> {
+                    exchange.getIn().setBody(exchange.getProperty("originalBody"));
+                    exchange.getIn().setHeader("headerStep", exchange.getIn().getHeader("headerStep"));
+                })
                 .process(exchange -> {
                     JsonObject jsonObject = exchange.getIn().getBody(JsonObject.class);
 
