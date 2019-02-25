@@ -1,0 +1,43 @@
+version: '3'
+services:
+  postgresqldb:
+    container_name: postgresqldb
+    image: rizkimufrizal/postgresql
+    environment:
+      - POSTGRES_MULTIPLE_DATABASES="db_central"
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+    networks:
+      main:
+        aliases:
+          - postgresqldb
+
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-mufrizalrizki@gmail.com}
+      PGADMIN_DEFAULT_PASSWORD: postgres
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+    networks:
+      main:
+        aliases:
+          - pgadmin
+
+  activemq:
+    container_name: activemq
+    image: webcenter/activemq
+    ports:
+      - "8161:8161"
+      - "61616:61616"
+      - "61613:61613"
+    networks:
+      main:
+        aliases:
+          - activemq
+
+networks:
+  main:
