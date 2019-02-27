@@ -8,6 +8,7 @@
     <camelContext id="catalog" xmlns="http://camel.apache.org/schema/blueprint">
         <routeBuilder ref="globalPostRouteBuilder"/>
         <routeBuilder ref="catalogGatewayRouteBuilder"/>
+        <routeBuilder ref="jwtRouteBuilder" />
     </camelContext>
 
     <bean id="globalPostRouteBuilder" class="org.rizki.mufrizal.esb.fuse.route.GlobalRouteBuilder">
@@ -15,20 +16,24 @@
     </bean>
 
     <!-- service route -->
+    <bean id="jwtRouteBuilder" class="org.rizki.mufrizal.esb.fuse.route.JwtRouteBuilder" />
     <bean id="catalogGatewayRouteBuilder" class="org.rizki.mufrizal.esb.fuse.route.CatalogGatewayRouteBuilder"/>
     <!-- service route -->
 
     <!-- service ws -->
     <bean id="catalogGatewayService" class="org.rizki.mufrizal.esb.fuse.service.CatalogGatewayService"/>
+    <bean id="jwtGatewayService" class="org.rizki.mufrizal.esb.fuse.service.JwtGatewayService"/>
     <!-- service ws -->
 
     <!-- CXF servers -->
     <camel-cxf:rsServer id="catalogGatewayServer" address="http://0.0.0.0:10002/v1" loggingFeatureEnabled="true">
         <camel-cxf:serviceBeans>
             <ref component-id="catalogGatewayService"/>
+            <ref component-id="jwtGatewayService"/>
         </camel-cxf:serviceBeans>
         <camel-cxf:providers>
             <ref component-id="jacksonJsonProvider"/>
+            <ref component-id="JWTTokenFilter" />
         </camel-cxf:providers>
     </camel-cxf:rsServer>
     <!-- CXF servers -->
@@ -36,5 +41,7 @@
     <!-- provider -->
     <bean id="jacksonJsonProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
     <!-- provider -->
+
+    <bean id="JWTTokenFilter" class="org.rizki.mufrizal.esb.fuse.jwt.JWTTokenFilter" />
 
 </blueprint>
