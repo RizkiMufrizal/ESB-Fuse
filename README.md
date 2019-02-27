@@ -1,7 +1,7 @@
 ## Install Dependency Osgi :
 
 1. install -s mvn:org.postgresql/postgresql/42.2.2
-2. feature:install jdbc pax-jdbc-pool-dbcp2 camel-sql camel-activemq camel-jms
+2. feature:install jdbc pax-jdbc-pool-dbcp2 camel-sql camel-activemq camel-jms cxf-rs-security-jose
 
 ## Build Project
 
