@@ -30,6 +30,7 @@ public class CatalogGatewayService {
 
     @Path("/catalogs")
     @POST
+    @JWTToken
     public Response saveCatalog(JsonObject jsonObject) {
         return null;
     }
