@@ -1,6 +1,7 @@
 package org.rizki.mufrizal.esb.fuse.service;
 
 import org.rizki.mufrizal.esb.fuse.helper.JsonObject;
+import org.rizki.mufrizal.esb.fuse.jwt.JWTToken;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -22,6 +23,7 @@ public class CatalogGatewayService {
 
     @Path("/catalogs")
     @GET
+    @JWTToken
     public Response getCatalogs() {
         return null;
     }
