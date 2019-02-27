@@ -1,5 +1,6 @@
 package org.rizki.mufrizal.esb.fuse.jwt;
 
+import org.apache.camel.EndpointInject;
 import org.apache.cxf.rs.security.jose.jws.JwsException;
 import org.rizki.mufrizal.esb.fuse.exception.InvalidJWTException;
 
@@ -18,12 +19,16 @@ import java.io.IOException;
  * @Time 09:27
  * @Project esb-fuse-service
  * @Package org.rizki.mufrizal.esb.fuse.jwt
- * @File JWTTokenFilter
+ * @File JWTTokenInterceptor
  */
 @Provider
 @JWTToken
 @Priority(Priorities.AUTHENTICATION)
-public class JWTTokenFilter implements ContainerRequestFilter {
+public class JWTTokenInterceptor implements ContainerRequestFilter {
+
+    @EndpointInject(uri = "direct:jwt-interceptor")
+    AuthorizationSendSql authorizationSendSql;
+
     @Override
     public void filter(ContainerRequestContext containerRequestContext) throws IOException {
         String headerJWT = containerRequestContext.getHeaderString("ESB-JWT");
@@ -32,7 +37,7 @@ public class JWTTokenFilter implements ContainerRequestFilter {
             String token = headerJWT.substring("Token".length()).trim();
 
             try {
-                new TokenVerifier(token, "secret").tokenValid();
+                new TokenVerifier(authorizationSendSql, token).tokenValid();
             } catch (JwsException | InvalidJWTException e) {
                 e.printStackTrace();
                 containerRequestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
