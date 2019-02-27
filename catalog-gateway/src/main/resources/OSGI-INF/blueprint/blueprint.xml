@@ -42,6 +42,6 @@
     <bean id="jacksonJsonProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
     <!-- provider -->
 
-    <bean id="JWTTokenFilter" class="org.rizki.mufrizal.esb.fuse.jwt.JWTTokenFilter" />
+    <bean id="JWTTokenFilter" class="org.rizki.mufrizal.esb.fuse.jwt.JWTTokenInterceptor" />
 
 </blueprint>
