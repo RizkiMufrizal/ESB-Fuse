@@ -6,9 +6,12 @@ import org.apache.cxf.rs.security.jose.jws.JwsException;
 import org.apache.cxf.rs.security.jose.jws.JwsJwtCompactConsumer;
 import org.apache.cxf.rs.security.jose.jwt.JwtClaims;
 import org.rizki.mufrizal.esb.fuse.exception.InvalidJWTException;
+import org.springframework.util.LinkedCaseInsensitiveMap;
 
 import java.time.Instant;
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @Author Rizki Mufrizal <mufrizalrizki@gmail.com>
@@ -21,18 +24,26 @@ import java.util.Base64;
  */
 public class TokenVerifier {
 
-    private String token;
-    private String secret;
+    private AuthorizationSendSql authorizationSendSql;
 
-    public TokenVerifier(String token, String secret) {
+    private String token;
+
+    public TokenVerifier(AuthorizationSendSql authorizationSendSql, String token) {
+        this.authorizationSendSql = authorizationSendSql;
         this.token = token;
-        this.secret = secret;
     }
 
     public void tokenValid() {
         try {
             JwsJwtCompactConsumer jwsConsumer = new JwsJwtCompactConsumer(this.token);
-            boolean isTokenValid = jwsConsumer.verifySignatureWith(new HmacJwsSignatureVerifier(Base64.getEncoder().encodeToString(this.secret.getBytes()), SignatureAlgorithm.HS256));
+
+            Map<String, String> stringMap = new HashMap<>();
+            stringMap.put("Username", jwsConsumer.getJwtClaims().getSubject());
+
+            LinkedCaseInsensitiveMap<String> linkedCaseInsensitiveMap = this.authorizationSendSql.sendSql(stringMap);
+            String secret = linkedCaseInsensitiveMap.get("secret");
+
+            boolean isTokenValid = jwsConsumer.verifySignatureWith(new HmacJwsSignatureVerifier(Base64.getEncoder().encodeToString(secret.getBytes()), SignatureAlgorithm.HS256));
 
             if (!isTokenValid) {
                 throw new InvalidJWTException(String.format("JWT Token Not Valid %s", this.token));
