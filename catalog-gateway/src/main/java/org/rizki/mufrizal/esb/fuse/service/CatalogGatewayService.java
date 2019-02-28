@@ -35,4 +35,9 @@ public class CatalogGatewayService {
         return null;
     }
 
+    @Path("/error-handler")
+    @POST
+    public Response sampleErrorHandler(JsonObject jsonObject) {
+        return null;
+    }
 }
